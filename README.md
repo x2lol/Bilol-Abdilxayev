@@ -2,7 +2,7 @@
 
 ---
 
-![Ryan Gosling](ryan.jpg)
+![img](ryan.jpg)
 
 ---
 
