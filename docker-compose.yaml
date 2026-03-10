@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: vcm
+      POSTGRES_PASSWORD: nu1ostaFor
+      POSTGRES_DB: lab_db
+    ports:
+      - "15433:5432"   # optional: expose to host
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgresql/schemas:/docker-entrypoint-initdb.d
+
+  bilol_abdilxayev:
+    build: .
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    image: ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest
+    container_name: bilol_abdilxayev
+    depends_on:
+      - postgres
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app   # your source + configs
+    environment:
+      WORKER_THREADS: 4
+      WORKER_FS_THREADS: 2
+      SERVER_PORT: 8080
+      LOGGER_LEVEL: info
+      IS_TESTING: false
+      PG_CONNECTION: postgresql://vcm:nu1ostaFor@postgres:5432/lab_db
+    ports:
+      - "8080:8080"
+    command: ["./build-debug/bilol_abdilxayev", "--config", "./configs/static_config.yaml"]
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    depends_on:
+      - bilol_abdilxayev
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro  # mount certs
+
+volumes:
+  pgdata:

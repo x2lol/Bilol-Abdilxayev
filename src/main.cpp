@@ -2,6 +2,8 @@
 #include <userver/clients/http/component_list.hpp>
 #include <userver/components/component.hpp>
 #include <userver/components/component_list.hpp>
+#include <userver/components/fs_cache.hpp>
+#include <userver/server/handlers/http_handler_static.hpp>
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/congestion_control/component.hpp>
 #include <userver/server/handlers/ping.hpp>
@@ -27,6 +29,8 @@ int main(int argc, char* argv[]) {
             .Append<bilol_abdilxayev::Hello>()
             .Append<userver::components::Postgres>("postgres-db-1")
             .Append<bilol_abdilxayev::HelloPostgres>()
+            .Append<userver::components::FsCache>("fs-cache-main")
+            .Append<userver::server::handlers::HttpHandlerStatic>();
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);
