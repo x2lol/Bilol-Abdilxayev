@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Models | Laboratory</title>
+
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/models.css">
+
+</head>
+
+<body>
+
+<header>
+<div class="logo">Bilol Abdilxayev · Study Notes</div>
+<div class="header-right">
+<div class="menu-button" onclick="toggleMenu()">☰</div>
+</div>
+</header>
+
+<div class="sidebar" id="sidebar">
+<div class="sidebar-title">Navigation</div>
+<a href="/">Home</a>
+<a href="/models">Models</a>
+<a href="#contact">Contact</a>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<main>
+
+<h1>Machine Learning Experiments</h1>
+
+<p>
+This section contains small neural network systems implemented
+entirely from scratch in C++ without external ML frameworks.
+The goal is to explore the mathematical foundations of learning
+algorithms and understand how modern models work internally.
+</p>
+
+
+<div class="model-list">
+
+<div class="model-card">
+
+<h3>Alphanumeric Character Recognition</h3>
+
+<p>
+Feed-forward neural network trained on handwritten characters.
+The model receives a 28×28 grid and predicts the most likely symbol.
+</p>
+
+<a href="/models/character-recognition">
+Open Demo →
+</a>
+
+</div>
+
+
+<div class="model-card">
+
+<h3>Coming Soon</h3>
+
+<p>
+Additional experiments will appear here as new models are implemented.
+</p>
+
+</div>
+
+</div>
+
+</main>
+
+<script src="/js/menu.js"></script>
+
+</body>
+</html>

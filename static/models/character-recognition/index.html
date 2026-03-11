@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/models.css">
+
+<title>Character Recognition Demo</title>
+</head>
+
+<body>
+    
+<header>
+<div class="logo">Bilol Abdilxayev · Study Notes</div>
+<div class="header-right">
+<div class="menu-button" onclick="toggleMenu()">☰</div>
+</div>
+</header>
+
+<div class="sidebar" id="sidebar">
+<div class="sidebar-title">Navigation</div>
+<a href="/">Home</a>
+<a href="/models">Models</a>
+<a href="#contact">Contact</a>
+</div>
+
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<main>
+
+<h1>Character Recognition Demo</h1>
+
+<p>
+Draw a digit or letter in the grid below. The canvas is internally mapped to a
+28×28 grid compatible with EMNIST/MNIST datasets.
+</p>
+
+<div class="recognition-layout">
+
+<div class="canvas-panel">
+
+<canvas id="canvas" width="280" height="280"></canvas>
+
+<div class="controls">
+<button onclick="clearCanvas()">Clear</button>
+<button onclick="sendToBackend()">Predict</button>
+</div>
+
+</div>
+
+<div class="prediction-panel">
+
+<h3>Predictions</h3>
+
+<div id="predictions"></div>
+
+</div>
+
+</div>
+
+</main>
+
+<script src="/js/menu.js"></script>
+<script src="/js/canvas_draw.js"></script>
+<script src="/js/predictions.js"></script>
+</body>
+</html>

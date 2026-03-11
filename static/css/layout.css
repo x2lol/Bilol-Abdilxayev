@@ -1,26 +1,3 @@
-
-:root{
-    --bg:#282431;
-    --text:#F2F2F3;
-    --accent:#D97223;
-    --important:#163750;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    line-height:1.6;
-}
-
-/* ---------- HEADER ---------- */
-
 header{
     position:fixed;
     top:0;
@@ -54,7 +31,6 @@ header{
     font-size:22px;
 }
 
-/* ---------- MAIN CONTENT ---------- */
 
 main{
     max-width:900px;
@@ -62,45 +38,7 @@ main{
     padding:100px 20px 80px;
 }
 
-h1{
-    font-size:2.3rem;
-    margin-bottom:20px;
-}
-
-h2{
-    margin-top:40px;
-    margin-bottom:10px;
-}
-
-p{
-    margin-bottom:14px;
-}
-
-a{
-    color:var(--accent);
-    text-decoration:none;
-}
-
-a:hover{
-    text-decoration:underline;
-}
-
-/* ---------- IMPORTANT BLOCK ---------- */
-
-.important{
-    background:var(--important);
-    padding:18px;
-    border-radius:8px;
-    margin:25px 0;
-}
-
-/* ---------- LIST ---------- */
-
-ul{
-    padding-left:20px;
-}
-
-/* ---------- RIGHT SIDEBAR ---------- */
+/* sidebar */
 
 .sidebar{
     position:fixed;
@@ -130,7 +68,7 @@ ul{
     margin-bottom:10px;
 }
 
-/* ---------- OVERLAY ---------- */
+/* overlay */
 
 .overlay{
     position:fixed;
@@ -139,8 +77,10 @@ ul{
     height:100%;
     width:100%;
     background:rgba(0,0,0,0.4);
+
     opacity:0;
     visibility:hidden;
+
     transition:0.3s;
 }
 
@@ -149,11 +89,12 @@ ul{
     visibility:visible;
 }
 
-/* ---------- FOOTER ---------- */
+/* footer */
 
 footer{
     background:#221e2c;
     border-top:1px solid rgba(255,255,255,0.06);
+
     padding:40px 20px;
 
     display:flex;
@@ -178,7 +119,7 @@ footer{
     opacity:0.7;
 }
 
-/* ---------- MOBILE ---------- */
+/* mobile */
 
 @media (max-width:700px){
 
