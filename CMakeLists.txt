@@ -17,15 +17,28 @@ endif()
 
 userver_setup_environment()
 
-# Common sources
-include_directories(src)
 
 add_library(
     ${PROJECT_NAME}_objs OBJECT
     src/greeting.cpp #
     src/hello.cpp #
     src/hello_postgres.cpp
+    src/recognize_character.cpp
+
+    # neural network component
+    src/machine_learning/datasets/loader.cpp
+    src/machine_learning/nn/dense_layer.cpp
+    src/machine_learning/nn/network.cpp
+    src/machine_learning/serialization/model_io.cpp
+    src/machine_learning/training/trainer.cpp
+    src/machine_learning/component.cpp
 )
+
+target_include_directories(
+    ${PROJECT_NAME}_objs
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 target_link_libraries(
     ${PROJECT_NAME}_objs
     PUBLIC userver::core #
