@@ -3,25 +3,17 @@
 #include <vector>
 
 #include <userver/formats/json/value.hpp>
+#include <userver/formats/parse/common_containers.hpp>
 
 namespace bilol_abdilxayev {
     struct RecognitionRequest {
         int width;
         int height;
-        std::vector<float> pixels;
-
+        std::vector<double> pixels;
     };
 
     RecognitionRequest Parse(
         const userver::formats::json::Value& json,
-        userver::formats::parse::To<RecognitionRequest>)
-    {
-        RecognitionRequest req;
+        userver::formats::parse::To<RecognitionRequest>);
 
-        req.width = json["width"].As<int>();
-        req.height = json["height"].As<int>();
-        req.pixels = json["pixels"].As<std::vector<float>>();
-
-        return req;
-    }
 } // nemaspace bilol_abdilxayev

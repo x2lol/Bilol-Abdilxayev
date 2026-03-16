@@ -78,6 +78,11 @@ components_manager:
             fs-cache-component: fs-cache-main
             path: /*                 # Registering handlers '/*' find files.
             method: GET              # Handle only GET requests.
+        
+        handler-recognize-character:
+            path: /v1/recognize-character
+            method: POST
+            task_processor: main-task-processor  # Run it on CPU bound task processor
 
         postgres-db-1:
             dbconnection: $pg-connection
@@ -86,3 +91,6 @@ components_manager:
             dns_resolver: async
             sync-start: true
             connlimit_mode: manual
+
+        neural-network:
+            model_path: /models/sgd_mnist_epoch_4.bin

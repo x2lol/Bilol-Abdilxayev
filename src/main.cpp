@@ -16,6 +16,8 @@
 
 #include <hello.hpp>
 #include <hello_postgres.hpp> 
+#include <machine_learning/component.hpp>
+#include <recognize_character.hpp>
 
 int main(int argc, char* argv[]) {
     auto component_list =
@@ -30,7 +32,9 @@ int main(int argc, char* argv[]) {
             .Append<userver::components::Postgres>("postgres-db-1")
             .Append<bilol_abdilxayev::HelloPostgres>()
             .Append<userver::components::FsCache>("fs-cache-main")
-            .Append<userver::server::handlers::HttpHandlerStatic>();
+            .Append<userver::server::handlers::HttpHandlerStatic>()
+            .Append<network::NeuralNetworkComponent>()
+            .Append<bilol_abdilxayev::RecognizeCharacter>();
         ;
 
     return userver::utils::DaemonMain(argc, argv, component_list);

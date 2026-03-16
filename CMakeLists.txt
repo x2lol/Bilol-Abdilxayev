@@ -4,6 +4,13 @@ project(bilol_abdilxayev CXX)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(DownloadUserver)
 
+#find_package(userver 
+#    REQUIRED 
+#    COMPONENTS core 
+#    chaotic
+#)
+
+
 find_package(
     userver
     COMPONENTS core #
@@ -24,6 +31,11 @@ add_library(
     src/hello.cpp #
     src/hello_postgres.cpp
     src/recognize_character.cpp
+    src/preprocessing.cpp
+
+    # models
+    src/models/recognition_request.cpp
+    src/models/recognition_response.cpp 
 
     # neural network component
     src/machine_learning/datasets/loader.cpp

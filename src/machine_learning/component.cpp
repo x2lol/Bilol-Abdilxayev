@@ -3,6 +3,8 @@
 
 #include <machine_learning/component.hpp>
 #include <machine_learning/serialization/model_io.hpp>
+#include <userver/yaml_config/schema.hpp>
+#include <userver/yaml_config/merge_schemas.hpp>
 
 namespace network {
     constexpr std::string_view kModelPath = "model_path";
@@ -26,6 +28,21 @@ namespace network {
 
     }
 
-    Network& GetNetwork();
+    userver::yaml_config::Schema NeuralNetworkComponent::GetStaticConfigSchema() {
+        return userver::yaml_config::MergeSchemas<
+            userver::components::LoggableComponentBase
+        >(R"(
+    type: object
+    description: Neural network inference component
+    additionalProperties: false
+    properties:
+        model_path:
+            type: string
+            description: Path to serialized neural network model
+    )");
+    }
+    Network& NeuralNetworkComponent::GetNetwork() {
+        return network_;
+    };
 
 } // network

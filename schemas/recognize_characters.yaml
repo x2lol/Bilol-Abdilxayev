@@ -1,0 +1,54 @@
+components:
+  schemas:
+
+    RecognitionRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - width
+        - height
+        - pixels
+      properties:
+        width:
+          type: integer
+
+        height:
+          type: integer
+
+        pixels:
+          type: array
+          description: Flattened grayscale pixel values normalized to [0,1]
+          minItems: 78400
+          maxItems: 78400
+          items:
+            type: number
+            format: float
+            minimum: 0
+            maximum: 1
+
+    Prediction:
+      type: object
+      additionalProperties: false
+      required:
+        - label
+        - probability
+      properties:
+        label:
+          type: string
+
+        probability:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+
+    RecognitionResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - predictions
+      properties:
+        predictions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Prediction"

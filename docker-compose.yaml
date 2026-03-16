@@ -27,6 +27,7 @@ services:
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app   # your source + configs
+      - ./models:/models      # ← ADD THIS
     environment:
       WORKER_THREADS: 4
       WORKER_FS_THREADS: 2

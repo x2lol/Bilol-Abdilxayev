@@ -17,7 +17,9 @@ namespace network {
         );
 
         Network& GetNetwork();
-
+        
+        static userver::yaml_config::Schema GetStaticConfigSchema();
+    
     private:
         Network network_;
     };

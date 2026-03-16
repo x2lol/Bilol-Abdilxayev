@@ -1,7 +1,7 @@
 #include <machine_learning/nn/network.hpp>
 
 namespace network {
-    math::Matrix<float> Network::forward(const math::Matrix<float>& input){
+    math::Matrix<float> Network::forward(const math::Matrix<float>& input) {
         math::Matrix<float> activations = input;
         
         for(DenseLayer& layer: layers) activations = layer.forward(activations);

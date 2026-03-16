@@ -18,13 +18,13 @@ function renderPredictions(list){
         const fill=document.createElement("div");
         fill.className="prediction-fill";
 
-        fill.style.width=(p.prob*100)+"%";
+        fill.style.width=(p.probability*100)+"%";
 
         track.appendChild(fill);
 
         const value=document.createElement("div");
         value.className="prediction-value";
-        value.innerText=(p.prob*100).toFixed(1)+"%";
+        value.innerText=(p.probability*100).toFixed(1)+"%";
 
         row.appendChild(label);
         row.appendChild(track);
@@ -58,7 +58,9 @@ async function sendToBackend(){
     });
 
     const data = await res.json();
-
-    renderPredictions(data.predictions);
+    
+    console.log(data);
+    
+    renderPredictions(data);
 
 }
