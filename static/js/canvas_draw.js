@@ -2,7 +2,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const SIZE = 280;
-const BRUSH_RADIUS = 8;
+const BRUSH_RADIUS = 12;
 
 const TOUCH_OFFSET_X = -30;
 const TOUCH_OFFSET_Y = -30;

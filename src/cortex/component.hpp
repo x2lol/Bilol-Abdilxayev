@@ -2,9 +2,9 @@
 
 #include <userver/components/loggable_component_base.hpp>
 
-#include <machine_learning/nn/network.hpp>
+#include <cortex/nn/network.hpp>
 
-namespace network {
+namespace cortex {
     class NeuralNetworkComponent final
         : public userver::components::LoggableComponentBase {
 
@@ -24,4 +24,4 @@ namespace network {
         Network network_;
     };
 
-} // namespace network
+} // namespace cortex

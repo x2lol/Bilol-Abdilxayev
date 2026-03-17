@@ -3,12 +3,14 @@
 #include <preprocessing.hpp>
 
 namespace bilol_abdilxayev {
-    static const std::vector<std::string> LABELS = {"0","1","2","3","4","5","6","7","8","9"};
-
+    static const std::vector<std::string> LABELS = {
+        "0","1","2","3","4","5","6","7","8","9",
+    };
+    
     RecognizeCharacter::RecognizeCharacter(const userver::components::ComponentConfig& config,
         const userver::components::ComponentContext& context)
         : HttpHandlerBase(config, context),
-          network_(context.FindComponent<network::NeuralNetworkComponent>().GetNetwork())
+          network_(context.FindComponent<cortex::NeuralNetworkComponent>().GetNetwork())
     {}
     
     std::string RecognizeCharacter::HandleRequestThrow(
@@ -19,19 +21,15 @@ namespace bilol_abdilxayev {
  
             RecognitionRequest req = request_json.As<RecognitionRequest>();
             
-            network::math::Matrix<float> img = pixels_to_matrix(req.pixels, req.width, req.height);
+            cortex::math::Matrix<float> input = preprocess(req.pixels, req.width, req.height);
 
-            network::math::Matrix<float> centered = center_image(img);
-            
-            network::math::Matrix<float> resized = resize_to_28(centered);
-
-            network::math::Matrix<float> output = network_.forward(flatten(resized));
+            cortex::math::Matrix<float> output = network_.forward(input);
 
             return  userver::formats::json::ToString(userver::formats::json::ValueBuilder{RecognitionResponse{build_predictions(output)}}.ExtractValue());
     }
 
 
-    std::vector<Prediction> RecognizeCharacter::build_predictions(const network::math::Matrix<float>& output) const {
+    std::vector<Prediction> RecognizeCharacter::build_predictions(const cortex::math::Matrix<float>& output) const {
         std::vector<Prediction> preds;
 
         preds.reserve(output.size());
@@ -48,7 +46,7 @@ namespace bilol_abdilxayev {
         };
 
         std::sort(preds.begin(), preds.end(), comp);
-
+        
         return preds;
     }
     

@@ -1,15 +1,22 @@
-#include <machine_learning/nn/dense_layer.hpp>
+#include <cortex/nn/dense_layer.hpp>
 #include <random>
 
-namespace network {
+namespace cortex {
+    
+DenseLayer::DenseLayer(size_t in_size, size_t out_size, activation::Type a, InitType init) : W(out_size, in_size), b(out_size, 1), act(a) {
 
-DenseLayer::DenseLayer(size_t in_size, size_t out_size, activation::Type a) : W(out_size, in_size), b(out_size, 1), act(a) {
-    // Xavier init
-    std::mt19937 gen(std::random_device{}());
-    std::uniform_real_distribution<float> dist(-1.0f / std::sqrt(in_size), 1.0f / std::sqrt(in_size));
+    if(init == InitType::Xavier) {
+        std::mt19937 gen(std::random_device{}());
+        std::uniform_real_distribution<float> dist(-1.0f / std::sqrt(in_size), 1.0f / std::sqrt(in_size));
 
-    for(size_t i = 0; i < W.size(); ++i) W[i] = dist(gen);
-    for(size_t i = 0; i < b.size(); ++i) b[i] = 0;
+        for(size_t i = 0; i < W.size(); ++i) W[i] = dist(gen);
+
+    } else {
+        
+        for(size_t i = 0; i < W.size(); ++i) W[i] = 0;
+    }
+
+    for(size_t i = 0; i < b.size(); ++i)  b[i] = 0;
 }
 
 math::Matrix<float> DenseLayer::forward(const math::Matrix<float>& x) {
@@ -41,4 +48,4 @@ math::Matrix<float> DenseLayer::backward(const math::Matrix<float>& dA, float le
     return dA_prev;
 }
 
-} // namespace network
+} // namespace cortex

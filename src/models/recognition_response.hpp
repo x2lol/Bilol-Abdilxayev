@@ -4,7 +4,7 @@
 
 #include <userver/formats/json/value.hpp>
 #include <userver/formats/parse/common_containers.hpp>
-#include <machine_learning/math/matrix.hpp>
+#include <cortex/math/matrix.hpp>
 
 namespace bilol_abdilxayev {
     struct Prediction {

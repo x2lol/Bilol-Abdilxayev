@@ -38,12 +38,10 @@ add_library(
     src/models/recognition_response.cpp 
 
     # neural network component
-    src/machine_learning/datasets/loader.cpp
-    src/machine_learning/nn/dense_layer.cpp
-    src/machine_learning/nn/network.cpp
-    src/machine_learning/serialization/model_io.cpp
-    src/machine_learning/training/trainer.cpp
-    src/machine_learning/component.cpp
+    src/cortex/nn/dense_layer.cpp
+    src/cortex/nn/network.cpp
+    src/cortex/serialization/model_io.cpp
+    src/cortex/component.cpp
 )
 
 target_include_directories(

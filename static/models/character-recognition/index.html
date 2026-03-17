@@ -34,8 +34,7 @@
 <h1>Numeric Character Recognition Demo</h1>
 
 <p>
-Draw a digit in the grid below. The canvas is internally mapped to a
-28×28 grid compatible MNIST dataset.
+    Sketch a digit on the grid below. The drawing is preprocessed by computing its center of mass, downsampling from 280×280 to 28×28, and transposing it to match the EMNIST format. The resulting matrix is then passed through the MLP for prediction. 
 </p>
 
 <div class="recognition-layout">

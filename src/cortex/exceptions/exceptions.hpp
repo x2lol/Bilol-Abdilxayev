@@ -2,9 +2,9 @@
 
 #include <string>
 #include <stdexcept>
-#include <fmt/format.h>
+#include <fmt/core.h>
 
-namespace network {
+namespace cortex {
     namespace math {
         class LinearAlgebraException : public std::runtime_error {
         public:
@@ -21,9 +21,9 @@ namespace network {
         class OutOfBounds : public LinearAlgebraException {
         public:
             explicit OutOfBounds(const std::string& msg) 
-                : LinearAlgebraException (fmt::format("Out of bounds: ", msg)) {}
+                : LinearAlgebraException (fmt::format("Out of bounds: {}", msg)) {}
         };
-    } //namspace network::math
+    } //namspace cortex::math
 
     namespace loader {
         class LoaderException : public std::runtime_error {
@@ -43,7 +43,7 @@ namespace network {
             explicit FileReadException(const std::string& path)
                 : LoaderException(fmt::format("Failed to read file: {}", path)) {}
         };
-    } //namspace network::loader
+    } //namspace cortex::loader
 
     namespace activation {
         class UnsupportedActivationType : public std::runtime_error {
@@ -51,5 +51,5 @@ namespace network {
                 explicit UnsupportedActivationType(const std::string& type)
                     : std::runtime_error(fmt::format("Unsupported activation type: {}", type)) {}
         };
-    } //namspace network::activation
-} // namespace network
+    } //namspace cortex::activation
+} // namespace cortex

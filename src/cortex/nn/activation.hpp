@@ -1,10 +1,10 @@
 #include <cmath>
 #include <algorithm>
 
-#include <machine_learning/math/matrix.hpp>
-#include <machine_learning/exceptions/exceptions.hpp>
+#include <cortex/math/matrix.hpp>
+#include <cortex/exceptions/exceptions.hpp>
 
-namespace network::activation {
+namespace cortex::activation {
 
 enum class Type { ReLU, Sigmoid, Softmax };
 
@@ -21,15 +21,17 @@ inline std::string to_string(const Type& type) {
         return "Softmax";
         break;
     }
+
+    return "Unsupported";
 }
 
 template<typename T>
 math::Matrix<T> apply_activation(const math::Matrix<T>& x, const Type& type) {
     switch(type) {
         case Type::ReLU:
-            return network::math::apply(x, [](T v){ return std::max(T(0), v); });
+            return math::apply(x, [](T v){ return std::max(T(0), v); });
         case Type::Sigmoid:
-            return network::math::apply(x, [](T v){ return T(1) / (T(1) + std::exp(-v)); });
+            return math::apply(x, [](T v){ return T(1) / (T(1) + std::exp(-v)); });
         case Type::Softmax: {
             math::Matrix<T> y(x.rows(), x.cols());
 
@@ -61,15 +63,15 @@ template<typename T>
 math::Matrix<T> apply_activation_deriv(const math::Matrix<T>& x, const Type& type) {
     switch(type) {
         case Type::ReLU:
-            return network::math::apply(x, [](T v){ return v > 0 ? 1 : 0; });
+            return math::apply(x, [](T v){ return v > 0 ? 1 : 0; });
         case Type::Sigmoid: {
             math::Matrix<T> sig = apply_activation(x, Type::Sigmoid);
-            return network::math::apply(sig, [](T v){ return v * (1 - v); });
+            return math::apply(sig, [](T v){ return v * (1 - v); });
         }
         default:
             throw UnsupportedActivationType(to_string(type));
     }
 }
 
-} // namespace network::activation
+} // namespace cortex::activation
 

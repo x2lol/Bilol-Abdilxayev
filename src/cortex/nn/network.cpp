@@ -1,7 +1,8 @@
-#include <machine_learning/nn/network.hpp>
+#include <cortex/nn/network.hpp>
+#include <cstring>
 
-namespace network {
-    math::Matrix<float> Network::forward(const math::Matrix<float>& input) {
+namespace cortex {
+    math::Matrix<float> Network::forward(const math::Matrix<float>& input){
         math::Matrix<float> activations = input;
         
         for(DenseLayer& layer: layers) activations = layer.forward(activations);
@@ -29,15 +30,34 @@ namespace network {
             }
         }
     }
-    
-    void Network::initialize(const std::vector<float>& weights, const std::vector<float>& biases) {
-        size_t i, j;
-        i = j = 0;
-        
-        for (DenseLayer& layer : layers) {
 
-            for(size_t k = 0; k < layer.W.size(); ++k) layer.W[k] = weights[i++];
-            for(size_t k = 0; k < layer.b.size(); ++k) layer.b[k] = biases[j++];
+    void Network::initialize(const std::vector<float>& weights, const std::vector<float>& biases) {
+
+        size_t expected_w = 0;
+        size_t expected_b = 0;
+
+        for(const DenseLayer& layer : layers) {
+            expected_w += layer.W.size();
+            expected_b += layer.b.size();
+        }
+
+        if(weights.size() != expected_w) throw math::DimensionMismatch("Weight vector size mismatch");
+
+        if(biases.size() != expected_b) throw math::DimensionMismatch("Bias vector size mismatch");
+
+        size_t wi = 0;
+        size_t bi = 0;
+
+        for(DenseLayer& layer : layers) {
+
+            size_t w_size = layer.W.size();
+            size_t b_size = layer.b.size();
+
+            std::memcpy(layer.W.data(), weights.data() + wi, w_size * sizeof(float));
+            std::memcpy(layer.b.data(), biases.data() + bi, b_size * sizeof(float));
+
+            wi += w_size;
+            bi += b_size;
         }
     }
-}
+} // namspace cortex

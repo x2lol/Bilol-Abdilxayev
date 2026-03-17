@@ -3,8 +3,8 @@
 #include <userver/components/component_context.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 
-#include <machine_learning/component.hpp>
-#include "models/recognition_response.hpp"
+#include <cortex/component.hpp>
+#include <models/recognition_response.hpp>
 
 namespace bilol_abdilxayev {
     
@@ -22,7 +22,7 @@ public:
         userver::server::request::RequestContext&) const override;
 
 private:
-    network::Network& network_;
-    std::vector<Prediction> build_predictions(const network::math::Matrix<float>& output) const;
+    cortex::Network& network_;
+    std::vector<Prediction> build_predictions(const cortex::math::Matrix<float>& output) const;
 };
 }  // namespace bilol_abdilxayev

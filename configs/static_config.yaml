@@ -93,4 +93,4 @@ components_manager:
             connlimit_mode: manual
 
         neural-network:
-            model_path: /models/sgd_mnist_epoch_4.bin
+            model_path: /models/sgd_emnist_digits_epoch_11.nn

@@ -3,31 +3,31 @@
 #include <cstddef>
 #include <algorithm>
 
-#include <machine_learning/exceptions/exceptions.hpp>
+#include <cortex/exceptions/exceptions.hpp>
 
-namespace network::math {
+namespace cortex::math {
 
 template<typename T>
 class Matrix {
 private:
     size_t rows_;
     size_t cols_;
-    std::unique_ptr<T[]> data;
+    std::unique_ptr<T[]> data_;
 
 public:
-    Matrix() : rows_(0), cols_(0), data(std::make_unique<T[]>(0)) {}
+    Matrix() : rows_(0), cols_(0), data_(std::make_unique<T[]>(0)) {}
 
-    Matrix(size_t rows, size_t cols) : rows_(rows), cols_(cols), data(std::make_unique<T[]>(rows_ * cols_)) {}
+    Matrix(size_t rows, size_t cols) : rows_(rows), cols_(cols), data_(std::make_unique<T[]>(rows_ * cols_)) {}
 
-    Matrix(const Matrix& other) : rows_(other.rows_), cols_(other.cols_), data(std::make_unique<T[]>(other.size())) {
+    Matrix(const Matrix& other) : rows_(other.rows_), cols_(other.cols_), data_(std::make_unique<T[]>(other.size())) {
         std::copy(
-            other.data.get(), 
-            other.data.get() + other.size(), 
-            data.get()
+            other.data_.get(), 
+            other.data_.get() + other.size(), 
+            data_.get()
         );
     }
 
-    Matrix(Matrix&& other) noexcept : rows_(other.rows_), cols_(other.cols_), data(std::move(other.data)) {
+    Matrix(Matrix&& other) noexcept : rows_(other.rows_), cols_(other.cols_), data_(std::move(other.data_)) {
         other.rows_ = 0;
         other.cols_ = 0;
     }
@@ -36,12 +36,12 @@ public:
         if (this == &other) return *this;
         rows_ = other.rows_;
         cols_ = other.cols_;
-        data = std::make_unique<T[]>(other.size());
+        data_ = std::make_unique<T[]>(other.size());
 
         std::copy(
-            other.data.get(),
-            other.data.get() + other.size(),
-            data.get()
+            other.data_.get(),
+            other.data_.get() + other.size(),
+            data_.get()
         );
 
         return *this;
@@ -52,7 +52,7 @@ public:
         
         rows_ = other.rows_;
         cols_ = other.cols_;
-        data = std::move(other.data);
+        data_ = std::move(other.data_);
         
         other.rows_ = 0;
         other.cols_ = 0;
@@ -65,7 +65,7 @@ public:
             throw OutOfBounds(fmt::format("cannot access entry at ({}, {}) on a {}x{} matrix", r, c, rows_, cols_));
         }
         
-        return data[r*cols_ + c];
+        return data_[r*cols_ + c];
     }
 
     const T& operator()(size_t r, size_t c) const {
@@ -73,7 +73,7 @@ public:
             throw OutOfBounds(fmt::format("cannot access entry at ({}, {}) on a {}x{} matrix", r, c, rows_, cols_));
         }
         
-        return data[r*cols_ + c];
+        return data_[r*cols_ + c];
     }
 
     T& operator[](size_t i) {
@@ -81,7 +81,7 @@ public:
             throw OutOfBounds(fmt::format("cannot access elementy at {} in a matrix of size {}", i, this->size()));
         }
         
-        return data[i];
+        return data_[i];
     }
 
 
@@ -90,18 +90,22 @@ public:
             throw OutOfBounds(fmt::format("cannot access elementy at {} in a matrix of size {}", i, this->size()));
         }
         
-        return data[i];
+        return data_[i];
     }
 
     size_t rows() const { return rows_; }
     size_t cols() const { return cols_; }
     size_t size() const { return rows_ * cols_; }
 
+    // unsafe
+    T* data() { return data_.get(); }
+    T* data() const { return data_.get(); }
+
     Matrix transpose() const {
         Matrix res(cols_, rows_);
 
-        T* dst = res.data.get();
-        const T* src = data.get();
+        T* dst = res.data_.get();
+        const T* src = data_.get();
 
         for (size_t i = 0; i < rows_; ++i) {
             const T* src_row = src + i * cols_;
@@ -116,25 +120,25 @@ public:
 
     Matrix operator*(const T& scalar) const {
         Matrix res(rows_, cols_);
-        for (size_t i = 0; i < size(); ++i) res.data[i] = data[i] * scalar;
+        for (size_t i = 0; i < size(); ++i) res.data_[i] = data_[i] * scalar;
         return res;
     }
 
     Matrix operator/(const T& scalar) const {
         Matrix res(rows_, cols_);
-        for (size_t i = 0; i < size(); ++i) res.data[i] = data[i] / scalar;
+        for (size_t i = 0; i < size(); ++i) res.data_[i] = data_[i] / scalar;
         return res;
     }
 
     Matrix operator+(const T& scalar) const {
         Matrix res(rows_, cols_);
-        for (size_t i = 0; i < size(); ++i) res.data[i] = data[i] + scalar;
+        for (size_t i = 0; i < size(); ++i) res.data_[i] = data_[i] + scalar;
         return res;
     }
 
     Matrix operator-(const T& scalar) const {
         Matrix res(rows_, cols_);
-        for (size_t i = 0; i < size(); ++i) res.data[i] = data[i] - scalar;
+        for (size_t i = 0; i < size(); ++i) res.data_[i] = data_[i] - scalar;
         return res;
     }
 
@@ -152,7 +156,7 @@ public:
         
 
         for (size_t i = 0; i < this->size(); ++i) {
-            res.data[i] = data[i] + other.data[i];
+            res.data_[i] = data_[i] + other.data_[i];
         }
 
         return res;
@@ -167,7 +171,7 @@ public:
         Matrix<T> res(rows_, cols_);
 
         for (size_t i = 0; i < this->size(); ++i) {
-            res.data[i] = data[i] - other.data[i];
+            res.data_[i] = data_[i] - other.data_[i];
         }
 
         return res;
@@ -180,14 +184,14 @@ public:
         }
         
         Matrix<T> res(rows_, other.cols());
-        std::fill(res.data.get(), res.data.get() + res.size(), T{});
+        std::fill(res.data_.get(), res.data_.get() + res.size(), T{});
 
         for (size_t i = 0; i < rows_; ++i) {
-            T* res_row = res.data.get() + i * other.cols();
-            const T* a_row = data.get() + i * cols_;
+            T* res_row = res.data_.get() + i * other.cols();
+            const T* a_row = data_.get() + i * cols_;
 
             for (size_t k = 0; k < cols_; ++k) {
-                const T* b_row = other.data.get() + k * other.cols();
+                const T* b_row = other.data_.get() + k * other.cols();
                 T a = a_row[k];
 
                 for (size_t j = 0; j < other.cols(); ++j) {
@@ -205,7 +209,7 @@ public:
         }
 
         for (size_t i = 0; i < this->size(); ++i) {
-            data[i] += other.data[i];
+            data_[i] += other.data_[i];
         }
 
         return *this;
@@ -217,7 +221,7 @@ public:
         }
         
         for (size_t i = 0; i < this->size(); ++i) {
-            data[i] -= other.data[i];
+            data_[i] -= other.data_[i];
         }
 
         return *this;
@@ -230,7 +234,7 @@ public:
         Matrix<T> res(rows_, cols_);
 
         for (size_t i = 0; i < this->size(); ++i) {
-            res.data[i] = data[i] * other.data[i];
+            res.data_[i] = data_[i] * other.data_[i];
         }
 
         return res;
@@ -247,9 +251,9 @@ public:
 
 
         for (size_t i = 0; i < rows_; ++i) {
-            T bias = other.data[i];
-            const T* a_row = data.get() + i * cols_;
-            T* r_row = res.data.get() + i * cols_;
+            T bias = other.data_[i];
+            const T* a_row = data_.get() + i * cols_;
+            T* r_row = res.data_.get() + i * cols_;
 
             for (size_t j = 0; j < cols_; ++j) {
                 r_row[j] = a_row[j] + bias;
@@ -270,8 +274,8 @@ public:
             throw DimensionMismatch( fmt::format("dot product is not defined for {}x{} and {}x{}", rows_, cols_, other.rows(), other.cols()));
         }
 
-        const T* a = data.get();
-        const T* b = other.data.get();
+        const T* a = data_.get();
+        const T* b = other.data_.get();
 
         size_t n = size();
 
@@ -298,7 +302,7 @@ Matrix<T> apply(const Matrix<T>& e, Func f) {
     return res;
 }
 
-} // namespace network::math
+} // namespace cortex::math
 
 
 /* TODO:
@@ -306,7 +310,7 @@ Matrix<T> apply(const Matrix<T>& e, Func f) {
 1. Define apply() as a member function
 2. Have a proper wrapper for Vector 
 3. Extend operator overloading for all possible scenarios e.g a*=b
-4. Expose data()
+4. Expose data_ safely
 
 3/13/2026
 

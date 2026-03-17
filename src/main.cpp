@@ -16,7 +16,7 @@
 
 #include <hello.hpp>
 #include <hello_postgres.hpp> 
-#include <machine_learning/component.hpp>
+#include <cortex/component.hpp>
 #include <recognize_character.hpp>
 
 int main(int argc, char* argv[]) {
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
             .Append<bilol_abdilxayev::HelloPostgres>()
             .Append<userver::components::FsCache>("fs-cache-main")
             .Append<userver::server::handlers::HttpHandlerStatic>()
-            .Append<network::NeuralNetworkComponent>()
+            .Append<cortex::NeuralNetworkComponent>()
             .Append<bilol_abdilxayev::RecognizeCharacter>();
         ;
 
